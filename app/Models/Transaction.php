@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Transaction extends Model
+final class Transaction extends Model
 {
     use HasFactory;
 
@@ -15,16 +17,9 @@ class Transaction extends Model
         'receiver_id',
         'amount',
         'commission_fee',
+        'total_deducted',
         'status',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'amount' => 'decimal:2',
-            'commission_fee' => 'decimal:2',
-        ];
-    }
 
     public function sender(): BelongsTo
     {
@@ -40,5 +35,14 @@ class Transaction extends Model
     {
         return $query->where('sender_id', $userId)
             ->orWhere('receiver_id', $userId);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:2',
+            'commission_fee' => 'decimal:2',
+            'total_deducted' => 'decimal:2',
+        ];
     }
 }
