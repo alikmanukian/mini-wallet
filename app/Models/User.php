@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'balance',
     ];
 
     /**
@@ -47,6 +48,24 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'balance' => 'decimal:2',
         ];
+    }
+
+    public function sentTransactions()
+    {
+        return $this->hasMany(Transaction::class, 'sender_id');
+    }
+
+    public function receivedTransactions()
+    {
+        return $this->hasMany(Transaction::class, 'receiver_id');
+    }
+
+    public function allTransactions()
+    {
+        return Transaction::query()
+            ->where('sender_id', $this->id)
+            ->orWhere('receiver_id', $this->id);
     }
 }
