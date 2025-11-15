@@ -18,7 +18,7 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         $amount = fake()->randomFloat(2, 10, 1000);
-        $commissionFee = $amount * 0.015;
+        $commissionFee = $amount * config('wallet.commission_rate');
 
         return [
             'sender_id' => User::factory(),

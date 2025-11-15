@@ -21,19 +21,35 @@ export type AppPageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     name: string;
-    quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    errors: Record<string, string[]>;
+    flash: Record<string, string>;
 };
 
 export interface User {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
     email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+export interface PaginatedData<T> {
+    data: T[];
+    meta: {
+        current_page: number;
+        from: number;
+        last_page: number;
+        per_page: number;
+        to: number;
+        total: number;
+    };
+    links: {
+        first: string | null;
+        last: string | null;
+        prev: string | null;
+        next: string | null;
+    };
+}

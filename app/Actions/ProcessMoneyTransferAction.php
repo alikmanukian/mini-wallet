@@ -4,24 +4,30 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Events\TransactionProcessed;
 use App\Exceptions\TransactionException;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 final readonly class ProcessMoneyTransferAction
 {
-    public function __construct(
-        private CalculateTransactionCommissionAction $calculateCommission
-    ) {}
-
+    /**
+     * @throws TransactionException
+     * @throws Throwable
+     */
     public function handle(User $sender, int $receiverId, float $amount): Transaction
     {
-        return DB::transaction(function () use ($sender, $receiverId, $amount) {
+        $transaction = DB::transaction(function () use ($sender, $receiverId, $amount) {
             $lockedSender = User::query()
                 ->where('id', $sender->id)
                 ->lockForUpdate()
                 ->first();
+
+            if (! $lockedSender) {
+                throw TransactionException::senderNotFound();
+            }
 
             $receiver = User::query()
                 ->where('id', $receiverId)
@@ -32,7 +38,7 @@ final readonly class ProcessMoneyTransferAction
                 throw TransactionException::receiverNotFound();
             }
 
-            $commission = $this->calculateCommission->handle($amount);
+            $commission = round($amount * config('wallet.commission_rate'), 2);
             $totalDeducted = $amount + $commission;
 
             if ($lockedSender->balance < $totalDeducted) {
@@ -51,5 +57,9 @@ final readonly class ProcessMoneyTransferAction
                 'status' => 'completed',
             ]);
         });
+
+        TransactionProcessed::dispatch($transaction);
+
+        return $transaction;
     }
 }

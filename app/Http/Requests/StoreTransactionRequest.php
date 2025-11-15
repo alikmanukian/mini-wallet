@@ -35,13 +35,15 @@ final class StoreTransactionRequest extends FormRequest
         $validator->after(function (Validator $validator) {
             if ($validator->errors()->isEmpty()) {
                 $amount = $this->input('amount');
-                $commission = $amount * 0.015;
+                $commissionRate = config('wallet.commission_rate');
+                $commission = $amount * $commissionRate;
                 $totalRequired = $amount + $commission;
+                $commissionPercentage = $commissionRate * 100;
 
                 if ($this->user()->balance < $totalRequired) {
                     $validator->errors()->add(
                         'amount',
-                        'Insufficient balance. You need '.number_format((float) $totalRequired, 2).' (including 1.5% commission) but only have '.number_format((float) $this->user()->balance, 2).'.'
+                        'Insufficient balance. You need '.number_format((float) $totalRequired, 2).' (including '.$commissionPercentage.'% commission) but only have '.number_format((float) $this->user()->balance, 2).'.'
                     );
                 }
             }

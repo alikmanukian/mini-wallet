@@ -1,0 +1,99 @@
+/* Force enable toast animations - must override everything */
+@media (prefers-reduced-motion: no-preference) {
+    [data-sonner-toaster] {
+        --normal-bg: hsl(var(--popover));
+        --normal-text: hsl(var(--popover-foreground));
+        --normal-border: hsl(var(--border));
+        --success-bg: hsl(var(--primary));
+        --success-text: hsl(var(--primary-foreground));
+        --error-bg: hsl(var(--destructive));
+        --error-text: hsl(var(--destructive-foreground));
+    }
+
+    [data-sonner-toaster] li {
+        animation-duration: 0.4s !important;
+        animation-timing-function: cubic-bezier(0.21, 1.02, 0.73, 1) !important;
+        animation-fill-mode: forwards !important;
+    }
+
+    /* Bottom position specific animations */
+    [data-sonner-toaster][data-y-position='bottom'] li {
+        animation-name: slide-in-bottom !important;
+    }
+
+    [data-sonner-toaster][data-y-position='bottom'] li[data-removed='true'] {
+        animation-name: slide-out-bottom !important;
+    }
+
+    /* Top position specific animations */
+    [data-sonner-toaster][data-y-position='top'] li {
+        animation-name: slide-in-top !important;
+    }
+
+    [data-sonner-toaster][data-y-position='top'] li[data-removed='true'] {
+        animation-name: slide-out-top !important;
+    }
+}
+
+/* Force animations even with reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    [data-sonner-toaster] li {
+        animation-duration: 0.4s !important;
+        animation-timing-function: cubic-bezier(0.21, 1.02, 0.73, 1) !important;
+        animation-fill-mode: forwards !important;
+    }
+
+    [data-sonner-toaster][data-y-position='bottom'] li {
+        animation-name: slide-in-bottom !important;
+    }
+
+    [data-sonner-toaster][data-y-position='bottom'] li[data-removed='true'] {
+        animation-name: slide-out-bottom !important;
+    }
+}
+
+/* Keyframes for bottom position */
+@keyframes slide-in-bottom {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out-bottom {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+/* Keyframes for top position */
+@keyframes slide-in-top {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out-top {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
