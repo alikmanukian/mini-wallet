@@ -37,6 +37,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $attributes = [
+        'balance' => '10000.00', // Default for 'balance' attribute
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
