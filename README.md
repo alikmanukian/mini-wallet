@@ -4,6 +4,7 @@ A simplified digital wallet application that allows users to transfer money to e
 
 <img src="docs/screenshot.png" alt="Mini Wallet Screenshot" width="100%" />
 
+**Demo URL**: https://mini-wallet-main-sjcc5c.laravel.cloud
 ## Features
 
 - **Laravel 12** - Latest Laravel framework
