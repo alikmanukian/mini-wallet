@@ -16,8 +16,7 @@ final readonly class TransactionRepository
         return Transaction::query()
             ->where('sender_id', $user->id)
             ->orWhere('receiver_id', $user->id)
-            ->with(['sender', 'receiver'])
-            ->orderBy('created_at', 'desc')
+            ->with(['sender', 'receiver'])->latest()
             ->paginate($perPage);
     }
 

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+final class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -22,12 +24,12 @@ class DatabaseSeeder extends Seeder
         $otherUsers = User::factory()->withoutTwoFactor()->count(9)->create();
 
         foreach ($otherUsers as $user) {
-            Transaction::factory()->count(rand(2, 5))->create([
+            Transaction::factory()->count(random_int(2, 5))->create([
                 'sender_id' => $testUser->id,
                 'receiver_id' => $user->id,
             ]);
 
-            Transaction::factory()->count(rand(1, 3))->create([
+            Transaction::factory()->count(random_int(1, 3))->create([
                 'sender_id' => $user->id,
                 'receiver_id' => $testUser->id,
             ]);

@@ -48,7 +48,7 @@ final readonly class ProcessMoneyTransferAction
             $lockedSender->decrement('balance', $totalDeducted);
             $receiver->increment('balance', $amount);
 
-            return Transaction::create([
+            return Transaction::query()->create([
                 'sender_id' => $lockedSender->id,
                 'receiver_id' => $receiver->id,
                 'amount' => $amount,
@@ -58,7 +58,7 @@ final readonly class ProcessMoneyTransferAction
             ]);
         });
 
-        TransactionProcessed::dispatch($transaction);
+        event(new TransactionProcessed($transaction));
 
         return $transaction;
     }

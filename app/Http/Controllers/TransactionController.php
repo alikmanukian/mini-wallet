@@ -10,6 +10,7 @@ use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Models\User;
 use App\Repositories\TransactionRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -28,7 +29,7 @@ final class TransactionController extends Controller
             'transactions' => fn () => TransactionResource::collection(
                 $transactionRepository->getUserTransactions($user)
             ),
-            'users' => fn () => $transactionRepository->getRecipients($user),
+            'users' => fn (): Collection => $transactionRepository->getRecipients($user),
             'commission_rate' => config('wallet.commission_rate'),
         ]);
     }
@@ -52,7 +53,7 @@ final class TransactionController extends Controller
             ]);
         } catch (Throwable) {
             return back()->withErrors([
-                'transaction' => "Something went wrong. Please try again later.",
+                'transaction' => 'Something went wrong. Please try again later.',
             ]);
         }
     }

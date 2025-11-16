@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,7 +32,8 @@ final class Transaction extends Model
         return $this->belongsTo(User::class, 'receiver_id');
     }
 
-    public function scopeForUser($query, int $userId)
+    #[Scope]
+    protected function forUser($query, int $userId)
     {
         return $query->where('sender_id', $userId)
             ->orWhere('receiver_id', $userId);
