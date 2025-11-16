@@ -6,7 +6,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -44,17 +46,26 @@ final class User extends Authenticatable
         'balance' => '10000.00', // Default for 'balance' attribute
     ];
 
-    public function sentTransactions()
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function sentTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'sender_id');
     }
 
-    public function receivedTransactions()
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function receivedTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'receiver_id');
     }
 
-    public function allTransactions()
+    /**
+     * @return Builder<Transaction>
+     */
+    public function allTransactions(): Builder
     {
         return Transaction::query()
             ->where('sender_id', $this->id)

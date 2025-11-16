@@ -31,7 +31,11 @@ final class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
+        $user = $request->user();
+        assert($user !== null);
+
+        /** @var array{password: string} $validated */
+        $user->update([
             'password' => $validated['password'],
         ]);
 

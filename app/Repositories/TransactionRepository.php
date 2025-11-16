@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 final readonly class TransactionRepository
 {
+    /**
+     * @return LengthAwarePaginator<int, Transaction>
+     */
     public function getUserTransactions(User $user, int $perPage = 10): LengthAwarePaginator
     {
         return Transaction::query()
@@ -20,6 +23,9 @@ final readonly class TransactionRepository
             ->paginate($perPage);
     }
 
+    /**
+     * @return Collection<int, User>
+     */
     public function getRecipients(User $currentUser): Collection
     {
         return User::query()

@@ -15,12 +15,15 @@ final class StoreTransactionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = $this->user();
+        assert($user !== null);
+
         return [
             'receiver_id' => [
                 'required',
                 'integer',
                 'exists:users,id',
-                'different:'.$this->user()->id,
+                'different:'.$user->id,
             ],
             'amount' => [
                 'required',
@@ -35,16 +38,20 @@ final class StoreTransactionRequest extends FormRequest
     {
         $validator->after(function (Validator $validator): void {
             if ($validator->errors()->isEmpty()) {
-                $amount = $this->input('amount');
+                $user = $this->user();
+                assert($user !== null);
+
+                $amount = $this->float('amount');
+                /** @var float $commissionRate */
                 $commissionRate = config('wallet.commission_rate');
                 $commission = $amount * $commissionRate;
                 $totalRequired = $amount + $commission;
                 $commissionPercentage = $commissionRate * 100;
 
-                if ($this->user()->balance < $totalRequired) {
+                if ($user->balance < $totalRequired) {
                     $validator->errors()->add(
                         'amount',
-                        'Insufficient balance. You need '.number_format((float) $totalRequired, 2).' (including '.$commissionPercentage.'% commission) but only have '.number_format((float) $this->user()->balance, 2).'.'
+                        'Insufficient balance. You need '.number_format($totalRequired, 2).' (including '.$commissionPercentage.'% commission) but only have '.number_format((float) $user->balance, 2).'.'
                     );
                 }
             }

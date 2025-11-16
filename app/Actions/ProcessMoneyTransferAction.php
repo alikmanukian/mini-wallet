@@ -38,7 +38,9 @@ final readonly class ProcessMoneyTransferAction
                 throw TransactionException::receiverNotFound();
             }
 
-            $commission = round($amount * config('wallet.commission_rate'), 2);
+            /** @var float $commissionRate */
+            $commissionRate = config('wallet.commission_rate');
+            $commission = round($amount * $commissionRate, 2);
             $totalDeducted = $amount + $commission;
 
             if ($lockedSender->balance < $totalDeducted) {

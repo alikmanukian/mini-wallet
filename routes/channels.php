@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('user.{userId}', fn ($user, $userId): bool => (int) $user->id === (int) $userId);
+Broadcast::channel('user.{userId}', fn (User $user, int $userId): bool => $user->id === $userId);
