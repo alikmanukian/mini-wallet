@@ -2,6 +2,8 @@
 
 A simplified digital wallet application that allows users to transfer money to each other. Built with Laravel 12, Inertia.js v2, Vue 3, and Tailwind CSS v4.
 
+<img src="docs/screenshot.png" alt="Mini Wallet Screenshot" width="100%" />
+
 ## Features
 
 - **Laravel 12** - Latest Laravel framework
