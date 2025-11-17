@@ -24,7 +24,7 @@ export type AppPageProps<
     auth: Auth;
     sidebarOpen: boolean;
     errors: Record<string, string[]>;
-    flash: Record<string, string>;
+    flash?: Record<string, string>;
 };
 
 export interface User {
